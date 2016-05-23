@@ -5,6 +5,43 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+#Notes from Day 1 of the Programming and Analyzing R Workshop
+
+setwd("~/Dropbox/ProgrammingAnalyzinginR/ProgrammingAnalyzinginR") #not necessary because the project will always open in the right directory
+library(foreign) #call package foreign in order to use read.spss
+Exp1 <- read.spss("DATA_Exp1_compact_correct67_outliers_1.sav", to.data.frame = TRUE) #read in data
+
+save(Exp1, file="Exp1.rda") #to save data as an R data object/file. Rda file is R data file, it can remember al variable names, rds is also R data file but it can only contain only 1 variable. Don't know why this is necessary but this is something new I've learned today. 
+
+load("Exp1.rda") #to load data
+
+Exp1$PPNo <- c(1:154) #attach/create a new variable to the data object Exp1 
+
+#Subsetting
+
+subset_data <- dataframe[dataframe$Year > 1945, "France", drop = FALSE] #Without drop = FALSE then the output will be just a vector. With drop = FALSE the output will be still a dataframe. This is only a note from the lecture of Wouter. I do not have the data to run this.
+
+#Using subsetting in statistical tests.
+
+postwar <- data[data$Year > 1945,]
+t.test(postwar$France, postwar$U.S., paired = TRUE) # t-test for the difference between France & US after 1945
+with(data[data$Year > 1945, t.test(France, U.S.,paired = TRUE)])  # another way to do this t-test
+
+#You can also use subsetting to do winsorizing
+
+#First calculate 3sd & mean
+
+#Then calculate the winsorized point = mean + 3sd
+
+#Then assign the values that are larger than 3sd with the winsorized point using "="
+
+
+
+
+
+
+
 ```
 
 ## R Markdown
