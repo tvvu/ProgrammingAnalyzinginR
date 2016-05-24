@@ -34,6 +34,11 @@ ggplot(income, aes(Year)) +
   geom_line(aes(y = Europe, colour = "Europe")) + 
   geom_line(aes(y = U.S., colour = "U.S.")) #The first Europe is when I actually need the variable, the second Europe is when I only need to specify that it is a different category. Hence the need for quotation marks in the second one. 
 
+#It is also possible to use base to make the graph
+plot(x = income$Year, y = income$U.S., type = "l", ylab = "Top decile income share", xlab = "Year", ylim = c(0, 0.5), frame.plot = F)
+lines(x = income$Year, y = income$Europe, col = "red")
+
+
 ```
 
 ## R Markdown
