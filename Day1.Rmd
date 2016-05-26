@@ -41,7 +41,6 @@ with(data[data$Year > 1945, t.test(France, U.S.,paired = TRUE)])  # another way 
 
 
 
-
 ```
 
 ## R Markdown

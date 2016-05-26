@@ -1,0 +1,68 @@
+---
+title: "RTfunction"
+output: html_document
+---
+
+#Making RT calculation function
+
+```{r}
+
+
+##Actually in the end it's better to subset the data first
+##And then make it into long format before doing everything else
+
+
+RT <- function(data, trials){
+  colACC = paste("ParticipantClickObject1.ACC", trials, sep=".")
+  ACC <- data[ , c("Subject",colACC)]
+  colRT= paste("ParticipantClickObject1.RT", trials, sep=".")
+  RT <- data[ , c("Subject",colRT)]
+  ACC <- melt(ACC,id.vars="Subject")
+  RT <- melt(RT,id.vars="Subject")
+  ACC$variable <- as.numeric(gsub("ParticipantClickObject1.ACC.", "", ACC$variable)) 
+  RT$variable <- as.numeric(gsub("ParticipantClickObject1.RT.", "", RT$variable)) 
+  colnames(ACC) <- c("Subject","Trial","ACC")
+  colnames(RT) <- c("Subject","Trial","RT")
+  merged <- arrange(merge(ACC,RT), Subject, Trial)
+  meanRT <- aggregate(merged["RT"], by = merged[,c("ACC","Subject"), drop = F], FUN = mean)
+  meanRT <- meanRT[meanRT$ACC == 1, ]
+  meanRT$RT[match(data$Subject, meanRT$Subject)]
+}
+
+
+
+
+
+Exp1$RT_exp = RT(Exp1, 1:12)
+head(Exp1$RT_exp)
+
+Exp2 = Exp1
+table(Exp2$Subject)
+ Exp2[Exp2$Subject < 50, colACC] = 0
+
+colnames(Exp2)
+
+Exp1$meanRT_exp = RT(Exp1, 1:12)
+head(meanRT_exp)
+Exp1$meanRT_trial = RT(Exp1[37:48])
+columns = Exp1[1:12]
+
+
+
+```
+
+
+```{r}
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

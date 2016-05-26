@@ -5,6 +5,21 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+##Watch out for the classes of objects
+
+dataframe[, "variable"] #this returns a vector
+dataframe["variable"] #this returns a data frame
+
+##New thing: regular expressions to clean the format of data
+
+d$time = gsub("[^0-9.","", d$time) #in the variable time in the dataframe d, find anything that is not a number and not a comma and replace them with nothing (so, to strip them off) 
+
+
+#I got sick and had to go early, but then the last part was tricky for people so they repeated it at the beginning of Day3
+
+
+
 ```
 
 ## R Markdown

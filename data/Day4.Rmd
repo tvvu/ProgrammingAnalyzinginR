@@ -1,0 +1,31 @@
+---
+title: "Day4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Day 4
+
+
+```{r}
+
+#recap of Day 3
+
+#Good advice: When you created functions they only exist in the environment. Better write complex functions in seperate functions.r files. 
+#And then source the function whenever needed by using the method source()
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

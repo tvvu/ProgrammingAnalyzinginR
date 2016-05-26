@@ -1,0 +1,84 @@
+---
+title: "Day3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+###Today it was about reshape2 and there's things that I didnt understand yet 
+###Important
+###Remember to consult Wouter's notes while reviewing the following codes
+
+private.capital <- read.csv("private_capital.csv")
+public.capital <- read.csv("public_capital.csv")
+
+nrow(private.capital)
+nrow(public.capital)
+table(private.capital$Year == public.capital$Year)
+capital = cbind(private.capital,public.capital[-1])
+head(capital)
+
+colnames(capital)[11:19] <- paste("public", colnames(capital[11:19]), sep = ".")
+head(capital)
+
+library(plyr)
+
+
+library(reshape2)
+
+#from wide to long
+
+public.long <- melt(public.capital, id.vars = "Year")
+private.long <- melt(private.capital, id.vars = "Year")
+head(public.long)
+capital.long <- merge(private.long, public.long) #the default merge just looks for everything that has the same values, which in this case only Spain and that's why it retains only Spain's data and discards everything else
+capital.long <- merge(private.long, public.long, by=c("Year","variable")) 
+
+colnames(capital.long) <- c("Year","Country","Public","Private")
+capital.long$Total = capital.long$Private + capital.long$Public
+save(capital.long, file = "capitallong.rdata")
+
+head(capital.long)
+
+#from long to wide
+
+capital.wide <- dcast(capital.long, Year ~ Country, value.var = "Total") #value.var just stores the value
+head(capital.wide)
+capital.wide$Decade <- floor(capital.wide$Year / 10) * 10
+tail(capital.wide)
+table(capital.wide$Decade, capital.wide$Year)
+
+
+d <- dcast(capital.long, Decade ~ Country, value.var = "Total",fun.aggregate = mean) #casting the data, taking the mean of the values inside the column "Total". What it is basically doing is mean(value.var[row = row & column = column]. 
+d <- dcast(capital.long, Decade ~ Country, value.var = "Public",fun.aggregate = mean) #casting the data, taking the mean of the values inside the colum "Public"
+head(d)
+
+aggregated <- aggregate(capital.long[c("Public","Private","Total")], by = capital.long[c("Decade","Country")], FUN = mean)
+head(aggregated)
+head(capital.long)
+
+aggregated <- aggregate(capital.long["Total"], by = capital.long[,"Country"], FUN = mean) #This gives an error because by = needs to be filled with a list or a dataframe while here the subset is a vector
+
+aggregated <- aggregate(capital.long["Total"], by = capital.long[,"Country", drop = F], FUN = mean) #Just add drop = F to indicate that you don't want it to automatically drop the subset into a vector
+
+```
+
+## Next part of the lecture today
+
+```{r cars}
+
+x <- x[x$variable %in% c("U.S.", "U.K.")] #Choose a variable which is either US or UK
+
+install.packages("quantpsych")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

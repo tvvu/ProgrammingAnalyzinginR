@@ -1,10 +1,77 @@
 ---
 title: "Assignment1"
-output: html_document
+output: word_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Assignment 1
+The goal of the 􏰄rst substantive assignment is to get started on using R for your own research.
+􏰀 Choose a topic or problem that you are currently working on or that you previously solved using a di􏰃erent statistics package.
+􏰀 Write down what the data is; what question you want to 􏰁ask􏰂 the data (hypotheses, research questions, etc); and what analyses you wil need to get the answers.
+􏰀 Write an R script to read your data into R. Explore the shape and contents of your data. Is there an internal structure? How many data frames do you have? What data types do the columns have?
+􏰀 Make a number of tables to show your data and explain what they mean
+
+```{r}
+#knitr::opts_chunk$set(echo = TRUE)
+
+library(foreign) #call package foreign in order to use read.spss
+Exp1 <- read.spss("DATA_Exp1_compact_correct67_outliers_1.sav", to.data.frame = TRUE) #read in data
+
+
+#Problem: ANOVA (IVs: within-subject Director, between-subject Condition; DV: accuracy)
+#Problem: ANOVA (IVs: within-subject Director, between-subject Condition; DV: perspective-taking errors)
+#Problem: ANOVA (IVs: within-subject Director, between-subject Condition; DV: RT)
+
+#First I need to create the variable: accuracy for experimental trials
+
+Exp1_ordered <-Exp1[,order(colnames(Exp1))]
+Exp1_cols <- colnames(Exp1_ordered)
+
+Exp1[,"ParticipantClickObject1.ACC.1"] #to subset 1 varible, testing how subsetting works
+colACC = paste("ParticipantClickObject1.ACC", 1:24, sep=".") #create a list of experimental ACC variables
+Exp1_ACC <- Exp1[ , c("Subject",colACC)] #subset the experimental ACC columns
+
+head(Exp1_ACC)
+
+colRT= paste("ParticipantClickObject1.RT", 1:24, sep=".") #create a list of experimental ACC variables
+Exp1_RT <- Exp1[ , c("Subject",colRT)] #subset the experimental ACC columns
+
+head(Exp1_RT)
+
+
+m.Exp1_ACC <- melt(Exp1_ACC,id.vars="Subject") #melt the ACC data into long format
+head(m.Exp1_ACC)
+
+m.Exp1_RT <- melt(Exp1_RT,id.vars="Subject") #melt the RT data into long format
+head(m.Exp1_RT)
+
+m.Exp1_ACC$variable <- as.numeric(gsub("ParticipantClickObject1.ACC.", "", m.Exp1_ACC$variable)) #get rid of the text "ParticipantClickbObject1."
+head(m.Exp1_RT)
+m.Exp1_RT$variable <- as.numeric(gsub("ParticipantClickObject1.RT.", "", m.Exp1_RT$variable))
+
+colnames(m.Exp1_ACC) <- c("Subject","Trial","ACC")
+colnames(m.Exp1_RT) <- c("Subject","Trial","RT")
+
+merged <- arrange(merge(m.Exp1_ACC,m.Exp1_RT), Subject, Trial)
+
+head(merged)
+
+summary(merged)
+
+meanRT <- aggregate(merged["RT"], by = merged[,c("ACC","Subject"), drop = F], FUN = mean)
+
+meanACC <- aggregate(merged["ACC"], by = merged[,c("Subject"), drop = F], FUN = mean)
+
+meanACCperTrial <- aggregate(merged["ACC"], by = merged[,c("Trial"), drop = F], FUN = mean)
+
+
+
+#Then I need to create the variable: perspective-taking error
+
+#Then I need to calculate the mean RT for only the correct trials
+
+
+
+
 ```
 
 ## R Markdown

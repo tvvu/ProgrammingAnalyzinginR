@@ -1,6 +1,6 @@
 ---
 title: "Day1b"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -30,6 +30,7 @@ ggplot(income, aes(Year, c(U.S.,Europe)))  + geom_line()
 
 #Make a plot with 2 variables (Europe and US) on the y axis and Year on the x axis
 #To see the changes Europe vs. US across the years
+#I've learned this from here http://stackoverflow.com/questions/3777174/plotting-two-variables-as-lines-using-ggplot2-on-the-same-graph
 ggplot(income, aes(Year)) + 
   geom_line(aes(y = Europe, colour = "Europe")) + 
   geom_line(aes(y = U.S., colour = "U.S.")) #The first Europe is when I actually need the variable, the second Europe is when I only need to specify that it is a different category. Hence the need for quotation marks in the second one. 
